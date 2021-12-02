@@ -9,9 +9,6 @@ Advent of Code - 2021
 | ⭐    | 1   | Sonar Sweep - Part 2    | 01:29:16 | 10643 |
 | ☀    | 1   | Sonar Sweep - Part 1    | 01:13:46 | 11254 |
 
-2: Dive!          
-⭐⭐  Day 1: Sonar Sweep  
-
 
 ### Credits
 
