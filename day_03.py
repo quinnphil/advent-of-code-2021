@@ -70,7 +70,7 @@ def get_life_support_rating(byte_list):
     o2_generator_rating = get_gas_rating(True, 0, byte_list, bit_counts)
     o2_generator_rating = int(o2_generator_rating, 2)
     print(f"{o2_generator_rating=}")
-    
+
     co2_scrubber_rating = get_gas_rating(False, 0, byte_list, bit_counts)
     co2_scrubber_rating = int(co2_scrubber_rating, 2)
     print(f"{co2_scrubber_rating=}")
