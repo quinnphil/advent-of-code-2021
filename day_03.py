@@ -2,7 +2,6 @@ import utils
 
 
 def get_bit_counts(byte_list):
-
     byte_length = len(byte_list[0])
     bit_counts = [0] * byte_length
     for byte in byte_list:
@@ -36,8 +35,7 @@ def get_power_consumption(byte_list):
     return power_consumption
 
 
-def get_gas_rating(start_bit, pos, byte_list, bit_counts ):
-
+def get_gas_rating(start_bit, pos, byte_list, bit_counts):
     new_list = []
 
     if bit_counts[pos] >= (len(byte_list) / 2):
@@ -50,9 +48,8 @@ def get_gas_rating(start_bit, pos, byte_list, bit_counts ):
         if int(byte[pos]) == keep:
             new_list.append(byte)
 
-
     if len(new_list) > 1:
-        pos+= 1
+        pos += 1
         bit_counts = get_bit_counts(new_list)
 
         new_list = get_gas_rating(start_bit, pos, new_list, bit_counts)
@@ -62,9 +59,7 @@ def get_gas_rating(start_bit, pos, byte_list, bit_counts ):
     return new_list
 
 
-
 def get_life_support_rating(byte_list):
-
     bit_counts = get_bit_counts(byte_list)
 
     o2_generator_rating = get_gas_rating(True, 0, byte_list, bit_counts)
@@ -80,22 +75,20 @@ def get_life_support_rating(byte_list):
     return life_support_rating
 
 
-
 def main():
-
     print('** Test 01 **')
-    bit_list = """00100
-11110
-10110
-10111
-10101
-01111
-00111
-11100
-10000
-11001
-00010
-01010"""
+    bit_list = ("00100\n"
+                "11110\n"
+                "10110\n"
+                "10111\n"
+                "10101\n"
+                "01111\n"
+                "00111\n"
+                "11100\n"
+                "10000\n"
+                "11001\n"
+                "00010\n"
+                "01010")
     print(get_power_consumption(bit_list.splitlines()))
     print()
 
