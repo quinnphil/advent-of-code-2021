@@ -1,6 +1,9 @@
 Advent of Code - 2021
 =====================
 
+### Language  
+Python 3.9
+
 ### Stats  
 
 | Stars | Day | Title                                                    | P1 Time  | P1 Rank | P2 Time  | P2 Rank | Notes               |
