@@ -132,44 +132,46 @@ def main():
             break
     print("-"*80)
 
-    print('** Part 01 **')
+
     data = utils.lines(utils.read_input_file(day))
     bingo_numbers, boards = make_boards(data)
 
-    is_bingo = False
-    print("Calling numbers: ", end='')
-    for bingo_number in bingo_numbers:
-        print(f"{bingo_number}, ", end='')
-        for i, board in enumerate(boards):
-            board.call(bingo_number)
-            is_bingo = board.check_bingo()
-
-            if is_bingo:
-                print("-- BINGO -- ")
-                score = board.get_score()
-                print(f"{i=}")
-                print(f"{board=}")
-                print(f"{score=}")
-                break
-        if is_bingo:
-            break
-
-    exit()
-
-    print("Part 02")
     winning_order = []
     already_won = []
+    print("Calling numbers: ", end='')
     for i, bingo_number in enumerate(bingo_numbers):
-        print(f"Called {bingo_number}")
-        for i, board in enumerate(boards):
+        print(f"{bingo_number} ", end='')
+        for j, board in enumerate(boards):
+            if j in already_won:
+                continue
             board.call(bingo_number)
             is_bingo = board.check_bingo()
 
-            if is_bingo and i not in already_won:
+            if is_bingo and j not in already_won:
                 print("-- BINGO -- ")
-                already_won.append(i)
-                winning_order.append(board.get_score())
-    print(f"{winning_order[-1]}")
+                already_won.append(j)
+                winning_order.append(board)
+    print("\n")
+    print("-" * 80)
+
+    print('** Part 01 **')
+    first_winner = winning_order[0]
+    first_winner_board_num = already_won[0]
+
+    print(f"[Board {first_winner_board_num}]")
+    first_winner.draw_board_state()
+    score = first_winner.get_score()
+    print(f"{score=}")
+
+    print("-" * 80)
+    print('** Part 02 **')
+    last_winner = winning_order[-1]
+    last_winner_board_num = already_won[-1]
+
+    print(f"[Board {last_winner_board_num}]")
+    last_winner.draw_board_state()
+    score = last_winner.get_score()
+    print(f"{score=}")
 
 
 if __name__ == "__main__":
