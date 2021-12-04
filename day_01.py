@@ -21,7 +21,7 @@ def calc_increase(data, window_size):
 
 def main():
 
-    print('** Test **')  # 1451
+    print('** Test **')
     test_data = [199, 200, 208, 210, 200, 207, 240, 269, 260, 263]
     print(calc_increase(test_data, 1))
     print()
@@ -29,11 +29,11 @@ def main():
     day = 1
     data = utils.ints(utils.lines(utils.read_input_file(day)))
 
-    print('** Part 01 **')  # 1451
+    print('** Part 01 **')
     print(calc_increase(data, window_size=1))
     print()
 
-    print('** Part 02 **')  # 1379
+    print('** Part 02 **')
     print(calc_increase(data, window_size=3))
     print()
 
