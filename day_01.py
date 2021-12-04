@@ -20,22 +20,28 @@ def calc_increase(data, window_size):
 
 
 def main():
+    day = 1
+
+    with open (f'input/day_{day:02d}_test.txt') as fh:
+        data_test = utils.ints(utils.lines(fh.read()))
 
     print('** Test **')
-    test_data = [199, 200, 208, 210, 200, 207, 240, 269, 260, 263]
-    print(calc_increase(test_data, 1))
+    increase = calc_increase(data_test, 1)
+    print(f"{increase}")
+    assert(increase == 7)
     print()
 
     day = 1
     data = utils.ints(utils.lines(utils.read_input_file(day)))
 
     print('** Part 01 **')
-    print(calc_increase(data, window_size=1))
+    increase = calc_increase(data, window_size=1)
+    print(f"{increase}")
     print()
 
     print('** Part 02 **')
-    print(calc_increase(data, window_size=3))
-    print()
+    increase = calc_increase(data, window_size=3)
+    print(f"{increase}")
 
 
 if __name__ == "__main__":
