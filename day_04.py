@@ -67,6 +67,18 @@ class Board:
         print(f"{self.score}")
         return self.score
 
+    def draw_board_state(self):
+        board_pic = ""
+        for x in range(self.x_size):
+            for y in range(self.y_size):
+                if self.squares[x][y].is_called:
+                    board_pic += f"-- "
+                else:
+                    board_pic += f"{self.squares[x][y].number:02d} "
+            board_pic += "\n"
+        print(board_pic)
+
+
     def __repr__(self):
         return str(self.squares)
 
@@ -107,6 +119,7 @@ def main():
     for bingo_number in bingo_numbers:
         print(f"Called {bingo_number}")
         for board in boards:
+            # board.draw_board_state()
             board.call(bingo_number)
             is_bingo = board.check_bingo()
 
@@ -114,7 +127,7 @@ def main():
             score = board.get_score()
             print(f"{score=}")
             break
-
+    exit()
 
     print('** Part 01 **')
     data = utils.lines(utils.read_input_file(day))
