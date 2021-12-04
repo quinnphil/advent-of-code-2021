@@ -20,14 +20,12 @@ class Board:
         self.y_size = y_size
         self.score = 0
         self.last_called = -1
-        assert(len(numbers) == x_size * y_size)
+        assert (len(numbers) == x_size * y_size)
         for x in range(x_size):
             self.squares.append([])
             for y in range(y_size):
                 e = numbers.pop(0)
                 self.squares[x].append(Square(e))
-
-
 
     def call(self, number):
 
@@ -76,12 +74,11 @@ class Board:
 def make_boards(data):
     all_numbers = data
     bingo_numbers = [int(n) for n in all_numbers[0].split(',')]
-    print(bingo_numbers)
+
     boards = []
     numbers = []
     for row in all_numbers[1:]:
         if row == "":
-            print('blank')
             if len(numbers) > 0:
                 board = Board(numbers)
                 boards.append(board)
@@ -98,29 +95,14 @@ def make_boards(data):
 
 
 def main():
-    data = """7,4,9,5,11,17,23,2,0,14,21,24,10,16,13,6,15,25,12,22,18,20,8,19,3,26,1
+    day = 4
 
-22 13 17 11  0
- 8  2 23  4 24
-21  9 14 16  7
- 6 10  3 18  5
- 1 12 20 15 19
+    with open (f'input/day_{day:02d}_test.txt') as fh:
+        data_test = utils.lines(fh.read())
 
- 3 15  0  2 22
- 9 18 13 17  5
-19  8  7 25 23
-20 11 10 24  4
-14 21 16 12  6
-
-14 21 17 24  4
-10 16 15  9 19
-18  8 23 26 20
-22 11 13  6  5
- 2  0 12  3  7
-"""
 
     print('** Test **')
-    bingo_numbers, boards = make_boards(data.splitlines())
+    bingo_numbers, boards = make_boards(data_test)
 
     for bingo_number in bingo_numbers:
         print(f"Called {bingo_number}")
@@ -133,24 +115,30 @@ def main():
             print(f"{score=}")
             break
 
-    day = 4
+
+    print('** Part 01 **')
     data = utils.lines(utils.read_input_file(day))
     bingo_numbers, boards = make_boards(data)
 
-    # print('** Part 01 **')
-    # is_bingo = False
-    # for bingo_number in bingo_numbers:
-    #     print(f"Called {bingo_number}")
-    #     for i, board in enumerate(boards):
-    #         board.call(bingo_number)
-    #         is_bingo = board.check_bingo()
-    #
-    #         if is_bingo:
-    #             print("-- BINGO -- ")
-    #             score = board.get_score()
-    #             print(f"{i=}")
-    #             print(f"{board=}")
-    #             print(f"{score=}")
+    is_bingo = False
+    print("Calling numbers: ", end='')
+    for bingo_number in bingo_numbers:
+        print(f"{bingo_number}, ", end='')
+        for i, board in enumerate(boards):
+            board.call(bingo_number)
+            is_bingo = board.check_bingo()
+
+            if is_bingo:
+                print("-- BINGO -- ")
+                score = board.get_score()
+                print(f"{i=}")
+                print(f"{board=}")
+                print(f"{score=}")
+                break
+        if is_bingo:
+            break
+
+    exit()
 
     print("Part 02")
     winning_order = []
@@ -166,7 +154,6 @@ def main():
                 already_won.append(i)
                 winning_order.append(board.get_score())
     print(f"{winning_order[-1]}")
-
 
 
 if __name__ == "__main__":
