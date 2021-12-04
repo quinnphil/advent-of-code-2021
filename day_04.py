@@ -61,10 +61,8 @@ class Board:
             for y in range(self.y_size):
                 if not self.squares[x][y].is_called:
                     unmarked.append(int(self.squares[x][y].number))
-        print(f"{self.last_called=}")
-        print(f"{unmarked=}")
+
         self.score = sum(unmarked) * int(self.last_called)
-        print(f"{self.score}")
         return self.score
 
     def draw_board_state(self):
@@ -75,7 +73,8 @@ class Board:
                     board_pic += f"-- "
                 else:
                     board_pic += f"{self.squares[x][y].number:02d} "
-            board_pic += "\n"
+            if x < self.x_size - 1:
+                board_pic += "\n"
         print(board_pic)
 
 
@@ -116,18 +115,22 @@ def main():
     print('** Test **')
     bingo_numbers, boards = make_boards(data_test)
 
+    print("Calling numbers: ", end='')
     for bingo_number in bingo_numbers:
-        print(f"Called {bingo_number}")
-        for board in boards:
+        print(f"{bingo_number} ", end='')
+        for i, board in enumerate(boards):
             # board.draw_board_state()
             board.call(bingo_number)
             is_bingo = board.check_bingo()
 
         if is_bingo:
+            print("-- BINGO --")
+            print(f"[Board {i}]")
+            board.draw_board_state()
             score = board.get_score()
             print(f"{score=}")
             break
-    exit()
+    print("-"*80)
 
     print('** Part 01 **')
     data = utils.lines(utils.read_input_file(day))
