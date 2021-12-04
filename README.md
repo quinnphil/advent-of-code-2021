@@ -1,10 +1,17 @@
 Advent of Code - 2021
 =====================
 
+### Description    
+[Advent of Code](https://adventofcode.com/) is an annual puzzle contest run during the month of December.
+  It consists of small programming challenges in the form of an [Advent calendar](https://en.wikipedia.org/wiki/Advent_calendar)
+  where a new puzzle is published each day for 25 days.  This code repository contains solutions that were used to 
+successfully answer problems from the 2021 contest.  
+
 ### Language  
 Python 3.9
 
-### Stats  
+### Personal Stats  
+Personal stats for [quinnphil](https://github.com/quinnphil).
 
 | Stars | Day | Title                                                    | P1 Time  | P1 Rank | P2 Time  | P2 Rank | Notes               |
 |:------|:----|:---------------------------------------------------------|:---------|:--------|:---------|:--------|:--------------------|
