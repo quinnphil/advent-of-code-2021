@@ -1,5 +1,6 @@
 import utils
 
+
 def get_vents(data):
     vents = []
     for line in data:
@@ -12,7 +13,6 @@ def get_vents(data):
             "x2": int(x2),
             "y2": int(y2)
         })
-
     return vents
 
 
@@ -50,15 +50,16 @@ def get_vent_points(vent, with_diagonal=False):
 
     return vent_points
 
-def get_map(vents, with_diagonal=False):
-    vent_locations = {}
+
+def get_vent_map(vents, with_diagonal=False):
+    vent_map = {}
     for vent in vents:
         vent_points = get_vent_points(vent, with_diagonal=with_diagonal)
         for vent_point in vent_points:
-            if vent_point not in vent_locations:
-                vent_locations[vent_point] = 0
-            vent_locations[vent_point] += 1
-    return vent_locations
+            if vent_point not in vent_map:
+                vent_map[vent_point] = 0
+            vent_map[vent_point] += 1
+    return vent_map
 
 
 def count_overlaps(map):
@@ -66,44 +67,53 @@ def count_overlaps(map):
     for p in map:
         if map[p] > 1:
             overlaps += 1
-
     return overlaps
 
 
 def main():
     day = 5
 
-    with open (f'input/day_{day:02d}_test.txt') as fh:
+    with open(f'input/day_{day:02d}_test.txt') as fh:
         data_test = utils.lines(fh.read())
 
-    print('** Test 01 **')
-    vents = get_vents(data_test)
-    map = get_map(vents)
-    overlaps = count_overlaps(map)
-    print(f"{overlaps=}")
-
-    with open (f'input/day_{day:02d}.txt') as fh:
+    with open(f'input/day_{day:02d}.txt') as fh:
         data = utils.lines(fh.read())
-    vents = get_vents(data)
-    print('** Part 01 **')
-    map = get_map(vents)
 
-    overlaps = count_overlaps(map)
-    print(f"{overlaps=}")
+    runs = [
+        {
+            "name": "** Test 01 **",
+            "data": data_test,
+            "with_diagonal": False,
+            "assert_value": 5
+        },
+        {
+            "name": "** Part 01 **",
+            "data": data,
+            "with_diagonal": False
+        },
+        {
+            "name": "** Test 02 **",
+            "data": data_test,
+            "with_diagonal": True,
+            "assert_value": 12
+        },
+        {
+            "name": "** Part 02 **",
+            "data": data,
+            "with_diagonal": True
+        }
+    ]
 
-    print("-" * 80)
+    for run in runs:
+        print(run['name'])
+        vents = get_vents(run['data'])
+        vent_map = get_vent_map(vents, with_diagonal=run['with_diagonal'])
+        overlaps = count_overlaps(vent_map)
+        print(f"{overlaps=}")
+        if assert_value := run.get('assert_value'):
+            assert (overlaps == assert_value)
+        print()
 
-    print('** Test 02 **')
-    vents = get_vents(data_test)
-    map = get_map(vents, with_diagonal=True)
-    overlaps = count_overlaps(map)
-    print(f"{overlaps=}")
-
-    print('** Part 02 **')
-    vents = get_vents(data)
-    map2 = get_map(vents, with_diagonal=True)
-    overlaps = count_overlaps(map2)
-    print(f"{overlaps=}")
 
 if __name__ == "__main__":
     main()
