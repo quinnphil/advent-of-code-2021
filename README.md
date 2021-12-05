@@ -21,7 +21,7 @@ Personal stats for [quinnphil](https://github.com/quinnphil).
 | ⭐⭐    | 2   | [Dive!](https://adventofcode.com/2021/day/2)                | 00:07:10 | 5013    | 00:11:27 | 4910    | 05:00 start         |
 | ⭐⭐    | 1   | [Sonar Sweep](https://adventofcode.com/2021/day/1)          | 01:13:46 | 11254   | 01:29:16 | 10643   | 06:05 start (late!) |
 
-### Alternative solutions
+### Alternative Solutions
 
 https://github.com/Bogdanp/awesome-advent-of-code#python
 
