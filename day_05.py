@@ -43,7 +43,7 @@ def get_vent_points(vent, with_diagonal=False):
     ay = vent['y1']
     vent_points.append((ax, ay))
 
-    while (ax != vent['x2'] or ay != vent['y2']):
+    while ax != vent['x2'] or ay != vent['y2']:
         ax += dx
         ay += dy
         vent_points.append((ax, ay))
