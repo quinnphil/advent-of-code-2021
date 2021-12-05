@@ -30,7 +30,7 @@ def get_vent_points(vent, with_diagonal=False):
         dx = 0
 
     # Diagonal
-    elif with_diagonal and abs(vent['x1'] - vent['x2']) == abs(vent['x1'] - vent['x2']):
+    elif with_diagonal and abs(vent['x1'] - vent['x2']) == abs(vent['y1'] - vent['y2']):
         dx = int((vent['x2'] - vent['x1']) / abs(vent['x2'] - vent['x1']))
         dy = int((vent['y2'] - vent['y1']) / abs(vent['y2'] - vent['y1']))
 
