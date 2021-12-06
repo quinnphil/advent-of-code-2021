@@ -1,118 +1,110 @@
 import utils
+import json
+
+class Fish():
+    def __init__(self, timer):
+        if timer:
+            self.timer = timer
+            self.is_new_fish = False
+
+        else:
+            self.timer = 8
+            self.is_new_fish = True
+
+    def pass_day(self):
+        if self.is_new_fish:
+            self.is_new_fish = False
+            return False
+
+        new_fish = False
+
+        self.timer = self.timer - 1
+
+        if self.timer == -1:
+            new_fish = True
+            self.timer = 6
+        return new_fish
+
+    def __repr__(self):
+        return str(self.timer)
 
 
-def get_vents(data):
-    vents = []
-    for line in data:
-        pairs = line.split(' -> ')
-        x1, y1 = pairs[0].split(',')
-        x2, y2 = pairs[1].split(',')
-        vents.append({
-            "x1": int(x1),
-            "y1": int(y1),
-            "x2": int(x2),
-            "y2": int(y2)
-        })
-    return vents
+def simulate_fish(input, days):
+    school = {i:0 for i in range(0, 9)}
+    for f in input:
+        if not school[f]:
+            school[f] = 1
+        else:
+            school[f] += 1
+
+    new_fish = 0
 
 
-def get_vent_points(vent, with_diagonal=False):
-    vent_points = []
-
-    # Horizontal
-    if vent['y1'] == vent['y2']:
-        dx = int((vent['x2'] - vent['x1']) / abs(vent['x2'] - vent['x1']))
-        dy = 0
-
-    # Vertical
-    elif vent['x1'] == vent['x2']:
-        dy = int((vent['y2'] - vent['y1']) / abs(vent['y2'] - vent['y1']))
-        dx = 0
-
-    # Diagonal
-    elif with_diagonal and abs(vent['x1'] - vent['x2']) == abs(vent['y1'] - vent['y2']):
-        dx = int((vent['x2'] - vent['x1']) / abs(vent['x2'] - vent['x1']))
-        dy = int((vent['y2'] - vent['y1']) / abs(vent['y2'] - vent['y1']))
-
-    # Nothing to do
-    else:
-        return vent_points
-
-    # Have directions, now just walk to next point
-    ax = vent['x1']
-    ay = vent['y1']
-    vent_points.append((ax, ay))
-
-    while ax != vent['x2'] or ay != vent['y2']:
-        ax += dx
-        ay += dy
-        vent_points.append((ax, ay))
-
-    return vent_points
+    for day in range(days):
+        new_school = {i: 0 for i in range(0, 9)}
+        respawn = 0
+        new_fish = 0
+        for f in school:
+            if f == 0 and school[f] > 0:
+                new_fish = school[0]
+                respawn = school[0]
+                school[0] = 0
+            elif f <= 0:
+                pass
+            else:
+                new_school[f-1] = school[f]
+        new_school[6] += respawn
+        new_school[8] += new_fish
+        school = dict(new_school)
+        # print(json.dumps(school, indent=2))
+        fish_count = (sum(school.values()))
+        # print(fish_count)
 
 
-def get_vent_map(vents, with_diagonal=False):
-    vent_map = {}
-    for vent in vents:
-        vent_points = get_vent_points(vent, with_diagonal=with_diagonal)
-        for vent_point in vent_points:
-            if vent_point not in vent_map:
-                vent_map[vent_point] = 0
-            vent_map[vent_point] += 1
-    return vent_map
-
-
-def count_overlaps(map):
-    overlaps = 0
-    for p in map:
-        if map[p] > 1:
-            overlaps += 1
-    return overlaps
-
+    return fish_count
 
 def main():
-    day = 5
+    day = 6
 
     with open(f'input/day_{day:02d}_test.txt') as fh:
-        data_test = utils.lines(fh.read())
+        data_test = [int(f) for f in utils.lines(fh.read())[0].split(',')]
 
     with open(f'input/day_{day:02d}.txt') as fh:
-        data = utils.lines(fh.read())
+        data = [int(f) for f in utils.lines(fh.read())[0].split(',')]
 
     runs = [
         {
             "name": "** Test 01 **",
             "data": data_test,
-            "with_diagonal": False,
-            "assert_value": 5
+            "days": 80,
+            "assert_value": 5934
         },
         {
             "name": "** Part 01 **",
             "data": data,
-            "with_diagonal": False
+            "days": 80
         },
         {
             "name": "** Test 02 **",
             "data": data_test,
-            "with_diagonal": True,
-            "assert_value": 12
+            "days": 256,
+            "assert_value": 26984457539
         },
         {
             "name": "** Part 02 **",
             "data": data,
-            "with_diagonal": True
+            "days": 256
         }
     ]
 
     for run in runs:
         print(run['name'])
-        vents = get_vents(run['data'])
-        vent_map = get_vent_map(vents, with_diagonal=run['with_diagonal'])
-        overlaps = count_overlaps(vent_map)
-        print(f"{overlaps=}")
+        print(data)
+        fish_count = simulate_fish(run['data'], run['days'])
+
+        print(fish_count)
         if assert_value := run.get('assert_value'):
-            assert (overlaps == assert_value)
-        print()
+            assert (fish_count == assert_value)
 
 
 if __name__ == "__main__":
