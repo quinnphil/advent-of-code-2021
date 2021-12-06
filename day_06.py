@@ -1,33 +1,4 @@
 import utils
-import json
-
-class Fish():
-    def __init__(self, timer):
-        if timer:
-            self.timer = timer
-            self.is_new_fish = False
-
-        else:
-            self.timer = 8
-            self.is_new_fish = True
-
-    def pass_day(self):
-        if self.is_new_fish:
-            self.is_new_fish = False
-            return False
-
-        new_fish = False
-
-        self.timer = self.timer - 1
-
-        if self.timer == -1:
-            new_fish = True
-            self.timer = 6
-        return new_fish
-
-    def __repr__(self):
-        return str(self.timer)
-
 
 def simulate_fish(input, days):
     school = {i:0 for i in range(0, 9)}
@@ -36,9 +7,6 @@ def simulate_fish(input, days):
             school[f] = 1
         else:
             school[f] += 1
-
-    new_fish = 0
-
 
     for day in range(days):
         new_school = {i: 0 for i in range(0, 9)}
@@ -56,10 +24,7 @@ def simulate_fish(input, days):
         new_school[6] += respawn
         new_school[8] += new_fish
         school = dict(new_school)
-        # print(json.dumps(school, indent=2))
         fish_count = (sum(school.values()))
-        # print(fish_count)
-
 
     return fish_count
 
@@ -99,10 +64,9 @@ def main():
 
     for run in runs:
         print(run['name'])
-        print(data)
         fish_count = simulate_fish(run['data'], run['days'])
 
-        print(fish_count)
+        print(f"{fish_count=}")
         if assert_value := run.get('assert_value'):
             assert (fish_count == assert_value)
 
