@@ -1,32 +1,30 @@
 import utils
 
-def simulate_fish(input, days):
-    school = {i:0 for i in range(0, 9)}
-    for f in input:
-        if not school[f]:
-            school[f] = 1
-        else:
-            school[f] += 1
+
+def simulate_fish(fish_initial, days):
+    school: dict = {i: 0 for i in range(0, 9)}
+    for f in fish_initial:
+        school[f] += 1
 
     for day in range(days):
         new_school = {i: 0 for i in range(0, 9)}
-        respawn = 0
         new_fish = 0
         for f in school:
             if f == 0 and school[f] > 0:
                 new_fish = school[0]
-                respawn = school[0]
                 school[0] = 0
             elif f <= 0:
                 pass
             else:
-                new_school[f-1] = school[f]
-        new_school[6] += respawn
+                new_school[f - 1] = school[f]
+        new_school[6] += new_fish
         new_school[8] += new_fish
         school = dict(new_school)
-        fish_count = (sum(school.values()))
+
+    fish_count = (sum(school.values()))
 
     return fish_count
+
 
 def main():
     day = 6
