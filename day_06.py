@@ -1,27 +1,20 @@
 import utils
 
-
 def simulate_fish(fish_initial, days):
-    school: dict = {i: 0 for i in range(0, 9)}
+
+    school = [0] * 9
+
     for f in fish_initial:
         school[f] += 1
 
+    p0 = 0 # Zero position
     for day in range(days):
-        new_school = {i: 0 for i in range(0, 9)}
-        new_fish = 0
-        for f in school:
-            if f == 0 and school[f] > 0:
-                new_fish = school[0]
-                school[0] = 0
-            elif f <= 0:
-                pass
-            else:
-                new_school[f - 1] = school[f]
-        new_school[6] += new_fish
-        new_school[8] += new_fish
-        school = dict(new_school)
+        # Add pos_0 fish to pos_7
+        school[(p0 + 7) % 9] += school[p0]
+        # Update p0
+        p0 = (p0 + 1) % 9
 
-    fish_count = (sum(school.values()))
+    fish_count = (sum(school))
 
     return fish_count
 
