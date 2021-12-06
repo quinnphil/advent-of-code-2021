@@ -1,13 +1,13 @@
 import utils
 
-def simulate_fish(fish_initial, days):
 
+def simulate_fish(fish_initial, days):
     school = [0] * 9
 
     for f in fish_initial:
         school[f] += 1
 
-    p0 = 0 # Zero position
+    p0 = 0  # Zero position
     for day in range(days):
         # Add pos_0 fish to pos_7
         school[(p0 + 7) % 9] += school[p0]
