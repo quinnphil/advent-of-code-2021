@@ -5,10 +5,9 @@ def simulate_fish(fish, days):
     TIMER_RANGE = 9
     NEW_FISH_POS = 7
     school = [fish.count(f) for f in range(0, TIMER_RANGE)]
-    p0 = 0  # Zero position
     for day in range(days):
+        p0 = day % TIMER_RANGE
         school[(p0 + NEW_FISH_POS) % TIMER_RANGE] += school[p0]
-        p0 = (p0 + 1) % TIMER_RANGE
     return sum(school)
 
 
