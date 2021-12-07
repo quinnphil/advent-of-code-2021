@@ -2,15 +2,11 @@ import utils
 
 
 def get_best_alignment(crab_positions, with_increment=False):
-    crabs = {}
-    move_costs = {}
-    alignments = {}
+    crabs = dict()
+    alignments = dict()
 
-    for cp in crab_positions:
-        if not crabs.get(cp):
-            crabs[cp] = 1
-        else:
-            crabs[cp] += 1
+    for i in crab_positions:
+        crabs[i] = crabs.get(i, 0) + 1
 
     for destination in range(0, max(crabs.keys()) + 1):
         fuel_total = 0
@@ -21,12 +17,7 @@ def get_best_alignment(crab_positions, with_increment=False):
                 # Move cost is 1
                 fuel_cost = distance * crabs[source]
             else:
-                if not move_costs.get(distance):
-                    move_cost = int(distance * (1 + distance) / 2)
-                    move_costs[distance] = move_cost
-                else:
-                    move_cost = move_costs.get(distance)
-                fuel_cost = move_cost * crabs[source]
+                fuel_cost = int(distance * (1 + distance) / 2) * crabs[source]
             fuel_total += fuel_cost
         alignments[destination] = fuel_total
 
