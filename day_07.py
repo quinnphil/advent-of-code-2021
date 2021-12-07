@@ -1,51 +1,38 @@
 import utils
 
-def get_best_alignment(crabs, increment=0):
-    print(crabs)
-    all = {}
-    min_fuel = -1
-    min_crab = 0
 
-    cache = {}
+def get_best_alignment(crab_positions, with_increment=False):
+    crabs = {}
+    move_costs = {}
+    alignments = {}
 
-    for crab in crabs:
-        if not all.get(crab):
-            all[crab] = 1
+    for cp in crab_positions:
+        if not crabs.get(cp):
+            crabs[cp] = 1
         else:
-            all[crab] += 1
-    print(all)
-    for align_on in range(0, max(all.keys())):
+            crabs[cp] += 1
+
+    for destination in range(0, max(crabs.keys()) + 1):
         fuel_total = 0
-        cost_paths = {}
-        for c_from in all:
-            fuel_cost = 0
-            if c_from == align_on:
-                continue
+
+        for source in crabs:
+            distance = abs(source - destination)
+            if not with_increment:
+                # Move cost is 1
+                fuel_cost = distance * crabs[source]
             else:
-                distance = abs(c_from - align_on)
-                if increment == 0:
-                    fuel_cost = distance * all[c_from]
+                if not move_costs.get(distance):
+                    move_cost = int(distance * (1 + distance) / 2)
+                    move_costs[distance] = move_cost
                 else:
-                    if not cache.get((all[c_from], distance)):
-                        for i in range(1, distance + 1):
-                            move_cost = (i) * all[c_from]
-                            fuel_cost += move_cost
-                        cache[(all[c_from], distance)] = fuel_cost
-                    fuel_cost = cache[(all[c_from], distance)]
+                    move_cost = move_costs.get(distance)
+                fuel_cost = move_cost * crabs[source]
             fuel_total += fuel_cost
+        alignments[destination] = fuel_total
 
+    min_crab, min_fuel = (min(alignments, key=alignments.get), min(alignments.values()))
 
-        if min_fuel == -1:
-            min_fuel = fuel_total
-            min_crab = align_on
-        elif fuel_total < min_fuel:
-            min_fuel = fuel_total
-            min_crab = align_on
-    return (min_crab, min_fuel)
-
-
-
-
+    return min_crab, min_fuel
 
 
 def main():
@@ -56,41 +43,40 @@ def main():
 
     with open(f'input/day_{day:02d}.txt') as fh:
         data = [int(f) for f in utils.lines(fh.read())[0].split(',')]
-    print(data)
 
     runs = [
         {
             "name": "** Test 01 **",
             "data": data_test,
             "assert_value": 37,
-            "increment": 0
+            "increment": False
         },
         {
             "name": "** Part 01 **",
             "data": data,
             "days": 80,
-            "increment": 0
+            "increment": False
         },
         {
             "name": "** Test 02 **",
             "data": data_test,
             "assert_value": 168,
-            "increment": 1
+            "increment": True
         },
         {
             "name": "** Part 02 **",
             "data": data,
-            "increment": 1
+            "increment": True
         },
     ]
 
     for run in runs:
         print(run['name'])
-        (min_crab, min_fuel) = get_best_alignment(run['data'], increment=run['increment'])
-        print(f"{min_crab=}")
-        print(f"{min_fuel=}")
+        (position, fuel) = get_best_alignment(run['data'], with_increment=run['increment'])
+        print(f"{position=}")
+        print(f"{fuel=}")
         if assert_value := run.get('assert_value'):
-            assert (min_fuel == assert_value)
+            assert (fuel == assert_value)
 
 
 if __name__ == "__main__":
