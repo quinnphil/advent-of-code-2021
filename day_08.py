@@ -286,6 +286,74 @@ def main():
 
     ]
 
+    # def print_bytes(byte_list):
+    #     print([f"{byte:02b}" for byte in byte_list])
+
+
+    def transpose_bytes(bytes_list):
+        # rotates a byte array
+        print(bytes_list)
+        byte_len = max([len(f"{byte:02b}") for byte in bytes_list])
+        byte_list_len = len(bytes_list)
+        print(f"{byte_len=}")
+
+        tbytes = [''] * byte_len
+        print(tbytes)
+
+        for bpos in range(0, byte_len):
+            for i, byte in enumerate(bytes_list):
+                byte_str = f"{byte:07b}"
+                # print(f"{byte_str}")
+                # print(f"{bpos=} {byte=} {byte_str=} ")
+                bit = byte_str[bpos]
+                # print(f"{bit=}")
+                tbytes[bpos] += bit
+
+
+        print(f"{tbytes=}")
+
+        return tbytes
+
+
+    def get_digit_map3(signal_codes):
+        print(signal_codes)
+        # Digit map will be something like:
+        # {'be': 1, 'fgadgef': 5.... whatever}
+        digit_map = {}
+
+        # Build a lookup for binary positions to set
+        letters = set(''.join(signal_codes))
+        start_pos = {i: j for i, j in zip(letters, range(0, len(letters)))}
+
+        # bin_lookup = {l for l in 'abcdefg', n for num in range(0)}
+        # Convert each signal byte into a binary number
+        # simply going to set a bit based on the letter position
+        # so axxxxxx = 1000000, xbxxxxx = 0100000, etc.
+        signal_bytes = []
+        for signal_code in signal_codes:
+            byte = 0
+            for letter in signal_code:
+                bit_index = start_pos[letter]
+                byte = byte | (1 << bit_index)
+            signal_bytes.append(byte)
+
+
+        # Transpose bytes
+        t_signal_bytes = transpose_bytes(signal_bytes)
+
+        # Each t_signal_byte represents a segment that can be turned on or off
+        # now we just need to figure out the valid order for the bytes to be in
+        # We'll know the ordering is correct if we can transpose them back
+        # and all the numbers are represented correctly.
+        for i, row in enumerate(t_signal_bytes):
+            print(i, row)
+
+
+
+
+        return digit_map
+
+
     def get_number(output, digit_map):
         s_num = ''
 
@@ -312,7 +380,8 @@ def main():
         sum = 0
         for line in lines:
             signal = line['signals']
-            digit_map = get_digit_mappings(signal, original_map=digits)
+            # digit_map = get_digit_mappings(signal)
+            digit_map = get_digit_map3(signal)
             num = get_number(line['output'], digit_map)
             sum += num
 
