@@ -50,6 +50,98 @@ def count_easy_digits(output):
                 count+=1
     return(count)
 
+
+def get_digit_mappings2(signal):
+    def count_1s(digit):
+        b_count = bin(digit).count('1')
+        return b_count
+
+
+    digits = [
+        0b1110111,  # 0
+        0b0010010,  # 1
+        0b1011101,  # 2
+        0b1011011,  # 3
+        0b0111010,  # 4
+        0b1101011,  # 5
+        0b1101111,  # 6
+        0b1010010,  # 7
+        0b1111111,  # 8
+        0b1111011,  # 9
+    ]
+
+    # Lengths
+    d_lens = dict()
+    for d in digits:
+        ld = count_1s(d)
+        d_lens[ld] = d_lens.get(ld, [])
+        d_lens[ld].append(d)
+
+    # Found
+    found = dict()
+    found[1] = d_lens[2][0]
+    found[4] = d_lens[4][0]
+    found[7] = d_lens[3][0]
+    found[8] = d_lens[7][0]
+
+    # A
+    posA = found[7] - found[1]
+
+    # F & G & D
+    posF = 0
+    posG = 0
+    posD = 0
+    for i in d_lens[6]:
+        # F
+        r = i & digits[1]
+        if count_1s(r) == 1:
+            found[6] = i
+            posF = r
+        # G
+        else:
+            r = i ^ (digits[4] | digits[7])
+            if count_1s(r) == 1:
+                found[9] = i
+                posG = r
+            # D
+            else:
+                r = i ^ digits[8]
+                found[0] = i
+                posD = r
+
+    # C
+    posC = found[8] ^ found[6]
+    posE = found[8] ^ found[9]
+
+    # B, F, E
+    posB = 0
+    for i in d_lens[5]:
+        print(f"{i} => {i=:07b}")
+        # B
+        r = i ^ digits[6]
+        if count_1s(r) == 1:
+            found[5] = i
+        else:
+            s = (i | digits[1]) ^ digits[8]
+            print(f"{s} => {s=:07b}")
+            if count_1s(s) == 1:
+                found[2] = i
+                posB = s
+    found[3] = (found[8] ^ posB) ^ posE
+
+    print(f"{d_lens=}")
+    print(f"{posA=}")
+    print(f"{posB=}")
+    print(f"{posC=}")
+    print(f"{posD=}")
+    print(f"{posE=}")
+    print(f"{posF=}")
+    print(f"{posG=}")
+    print(f"{found=}")
+
+    return (found)
+
+
 def get_digit_mappings(signal, original_map):
     print(f"{original_map=}")
 
