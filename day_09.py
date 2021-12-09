@@ -1,67 +1,53 @@
 import utils
 import math
 
+
 def make_grid(data):
-    width = max(len(d) for d in data)
-    height = len(data)
-    grid = [[-1] * width for i in range(height)]
+    grid = {}
 
     for y, row in enumerate(data):
-        for x, element in enumerate(row):
-            grid[y][x] = int(element)
-
+        for x, e in enumerate(row):
+            grid[(y, x)] = int(e)
 
     return grid
 
 
-
 def get_lowpoints(grid):
-    width = max(len(d) for d in grid)
-    height = len(grid)
+    low_points = {}
+    not_low_point = {}
 
-    low_points = []
+    for p in grid:
+        # Skip if not a low point
+        if p in not_low_point.keys():
+            continue
+        py = p[0]
+        px = p[1]
+        pv = grid[p]
 
-    for y in range(0, height):
-        for x in range(0, width):
-            element = grid[y][x]
-            local_points = []
-            for dx in [-1, 1]:
-                dy = 0
-                if (x + dx) < 0 or (x + dx) >= width:
-                    continue
-                p = grid[y + dy][x + dx]
-                local_points.append(p)
-            for dy in [-1, 1]:
-                dx = 0
-                if (y+ dy) < 0 or (y + dy) >= height:
-                    continue
-                p = grid[y + dy][x + dx]
-                local_points.append(p)
-            if element < min(local_points):
-                low_points.append((y,x,element))
-    print(f"{low_points=}")
+        siblings = {}
+        # North, South, East, West
+        for dy, dx in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
+            sy = py + dy
+            sx = px + dx
+            if (s := grid.get((sy, sx))) is not None:
+                siblings[(sy, sx)] = s
 
+        if all(sv > pv for sv in siblings.values()):
+            # Found low point
+            low_points[(py, px)] = pv
+            # None of the siblings can be low points
+            for sv in siblings:
+                not_low_point[sv] = siblings[sv]
 
     return low_points
 
 
+def get_basins(grid, low_points):
 
-
-def get_risk(low_points):
-    risk = 0
-    for lp in low_points:
-        risk += 1 + lp[2]
-
-    print(f"{risk=}")
-    return risk
-
-
-def get_basins(grid,low_points):
     basins = []
 
-    width = max(len(d) for d in grid)
-    height = len(grid)
-
+    # Deal with everything as a tuple -- this allows popping on/off
+    # Also - I don't care about the value of the from this point onwards
     for low_point in low_points:
         p_queue = []
         p_done = []
@@ -69,40 +55,24 @@ def get_basins(grid,low_points):
 
         while len(p_queue) > 0:
             p = p_queue.pop()
+            py = p[0]
+            px = p[1]
+            pv = grid[p]
 
-            # Skip if we've already been to this basin
+            # Skip if we've already been to this point
             # Also skip 9s
-            if p in p_done or p[2] == 9:
+            if p in p_done or pv == 9:
                 continue
 
-            # Check adjacent horizontal
-            for dx in [-1, 1]:
-                cy = p[0]
-                cx = p[1] + dx
-                # Check x bounds
-                if (cx < 0) or (cx >= width):
-                    continue
-                c = grid[cy][cx]
-                # if (c == p[2]) or (c == p[2] + 1):
-                if (c >= p[2]) and (c < 9):
-                    # check if already seen
-                    if (cy, cx, c) not in p_done:
-                        p_queue.append((cy,cx, c))
-
-            # Check adjacent vertical
-            for dy in [-1, 1]:
-                cx = p[1]
-                cy = p[0] + dy
-                # Check x bounds
-                if cy < 0 or (cy >= height):
-                    continue
-                c = grid[cy][cx]
-                # In range
-                # if (c == p[2]) or (c == p[2] + 1):
-                if (c >= p[2]) and (c < 9):
-                    # check if already seen
-                    if (cy, cx, c) not in p_done:
-                        p_queue.append((cy, cx, c))
+            # North, South, East, West
+            for dy, dx in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
+                sy = py + dy
+                sx = px + dx
+                if (s := grid.get((sy, sx))) is not None:
+                    if (s >= pv) and (s < 9):
+                        # check if already seen
+                        if (sy, sx) not in p_done:
+                            p_queue.append((sy, sx))
             p_done.append(p)
         basins.append(p_done)
     return basins
@@ -133,19 +103,18 @@ def main():
 
     for run in runs:
         print(run['name'])
+
         grid = make_grid(run['data'])
         low_points = get_lowpoints(grid)
+        print(f'{low_points}')
 
-        risk = get_risk(low_points)
-        if assert_value := run.get('assert_value'):
-            assert (risk == assert_value)
+        risk = sum(low_points.values()) + len(low_points)
+        print(f'{risk=}')
 
         basins = get_basins(grid, low_points)
-
-        s_basins = sorted( basins, key=len, reverse=True )
-        basin_product = math.prod([len(s) for s in s_basins[:3]])
-        print(f"{basin_product=}")
-
+        s_basins = sorted(basins, key=len, reverse=True)
+        basin_product2 = math.prod([len(s) for s in s_basins[:3]])
+        print(f'{basin_product2=}')
 
 
 if __name__ == "__main__":
