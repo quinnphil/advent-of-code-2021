@@ -18,7 +18,7 @@ Python 3.9
 | Stars | Day | Title                                                          | P1 Time  | P1 Rank | P2 Time  | P2 Rank | Notes               |
 |:------|:----|:---------------------------------------------------------------|:---------|:--------|:---------|:--------|:--------------------|
 | ⭐⭐    | 9   | [Smoke Basin](https://adventofcode.com/2021/day/9)             | 00:40:57 | 8172    | 03:06:38 | 11396   | lowpoints / basins  |
-| ⭐⭐    | 8   | [Seven Segment Search](https://adventofcode.com/2021/day/8)    | 00:35:16 | 8852    | 06:12:32 | 15900   | digits              |
+| ⭐⭐    | 8   | [Seven Segment Search](https://adventofcode.com/2021/day/8)    | 00:35:16 | 8852    | 06:12:32 | 15900   | digits * revisit!   |
 | ⭐⭐    | 7   | [The Treachery of Whales](https://adventofcode.com/2021/day/7) | 00:21:26 | 8267    | 01:38:17 | 13857   | crabs               |
 | ⭐⭐    | 6   | [Lanternfish](https://adventofcode.com/2021/day/6)             | 00:21:56 | 7068    | 01:08:58 | 7534    | single array        |
 | ⭐⭐    | 5   | [Hydrothermal Venture](https://adventofcode.com/2021/day/5)    | 00:36:22 | 4992    | 01:02:40 | 5333    | tuples              |
