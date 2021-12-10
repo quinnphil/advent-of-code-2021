@@ -1,391 +1,99 @@
 import utils
-import math
-def get_digits():
-    digits = dict()
-    primes = {
-        "a": 2,
-        "b": 3,
-        "c": 5,
-        "d": 7,
-        "e": 11,
-        "f": 13,
-        "g": 17,
-        "h": 19,
-        "i": 23,
-        "j": 29
-    }
-    digits[0] = math.prod([primes[l] for l in "abcefg"])
-    digits[1] = math.prod([primes[l] for l in "cf"])
-    digits[2] = math.prod([primes[l] for l in "acdeg"])
-    digits[3] = math.prod([primes[l] for l in "acdfg"])
-    digits[4] = math.prod([primes[l] for l in "bcdf"])
-    digits[5] = math.prod([primes[l] for l in "abdfg"])
-    digits[6] = math.prod([primes[l] for l in "abdefg"])
-    digits[7] = math.prod([primes[l] for l in "acf"])
-    digits[8] = math.prod([primes[l] for l in "abcdefg"])
-    digits[9] = math.prod([primes[l] for l in "abcdfg"])
 
-    return digits
+def get_codes_by_len(codes):
+    code_count = {}
+    for code in codes:
+        if not code_count.get(len(code)):
+            code_count[len(code)] = []
+        code_count[len(code)].append(code)
 
+    return code_count
 
+def decode_line(input, output):
 
-def get_lines(data):
-    lines = []
-    for i, line in enumerate(data):
-        signal, output = line.split('|')
-        signal = [s for s in signal.strip().split(' ')]
-        output = [o for o in output.strip().split(' ')]
-        lines.append({
-            "line": i,
-            "signals": signal,
-            "output": output
-        })
-    return(lines)
+    value = 0
+    n = {}
 
-def count_easy_digits(output):
-    count = 0
-    for l in output:
-        for s in l:
-            if len(s) in [2,3,4,7]:
-                count+=1
-    return(count)
+    print(f'{input=}')
+    print(f'{output=}')
+    input_count = get_codes_by_len(input)
+    print(f'{input_count=}')
 
+    # Easy numbers
+    n[1] = input_count[2].pop()  # 1 is the only number with two segments
+    n[4] = input_count[4].pop()   # 4 is the only number with four segments
+    n[7] = input_count[3].pop()   # 7 is the only number with three segments
+    n[8] = input_count[7].pop()   # 8 is the only number with seven segments
 
-def get_digit_mappings2(signal):
-    def count_1s(digit):
-        b_count = bin(digit).count('1')
-        return b_count
+    # Solve
+    # 9 minus 4 has a segment length of 2
+    n[9] = [c for c in input_count[6] if len(set(c) ^ set(n[4])) == 2].pop()
 
+    # 3 add 1 has segment length of 5
+    n[3] = [c for c in input_count[5] if len(set(c) | set(n[1])) == 5].pop()
 
-    digits = [
-        0b1110111,  # 0
-        0b0010010,  # 1
-        0b1011101,  # 2
-        0b1011011,  # 3
-        0b0111010,  # 4
-        0b1101011,  # 5
-        0b1101111,  # 6
-        0b1010010,  # 7
-        0b1111111,  # 8
-        0b1111011,  # 9
-    ]
+    # 6 add 1 has segment length of 7
+    n[6] = [c for c in input_count[6] if len(set(c) | set(n[1])) == 7].pop()
 
-    # Lengths
-    d_lens = dict()
-    for d in digits:
-        ld = count_1s(d)
-        d_lens[ld] = d_lens.get(ld, [])
-        d_lens[ld].append(d)
+    # 0 is the only other 6 length
+    n[0] = [c for c in input_count[6] if c not in [n[6], n[9]]].pop()
 
-    # Found
-    found = dict()
-    found[1] = d_lens[2][0]
-    found[4] = d_lens[4][0]
-    found[7] = d_lens[3][0]
-    found[8] = d_lens[7][0]
+    # 5 minus 6 has a segment length of 1
+    n[5] = [c for c in input_count[5] if len(set(c) ^ set(n[6])) == 1].pop()
 
-    # A
-    posA = found[7] - found[1]
+    # 2 is the only remaining 5 length
+    n[2] = [c for c in input_count[5] if c not in [n[3], n[5]]].pop()
 
-    # F & G & D
-    posF = 0
-    posG = 0
-    posD = 0
-    for i in d_lens[6]:
-        # F
-        r = i & digits[1]
-        if count_1s(r) == 1:
-            found[6] = i
-            posF = r
-        # G
-        else:
-            r = i ^ (digits[4] | digits[7])
-            if count_1s(r) == 1:
-                found[9] = i
-                posG = r
-            # D
-            else:
-                r = i ^ digits[8]
-                found[0] = i
-                posD = r
+    nl = {''.join(sorted(v)): k for k, v in n.items()}
 
-    # C
-    posC = found[8] ^ found[6]
-    posE = found[8] ^ found[9]
+    str_int = ""
+    for d in output:
+        str_int += str(nl[''.join(sorted(d))])
+    value = int(str_int)
 
-    # B, F, E
-    posB = 0
-    for i in d_lens[5]:
-        print(f"{i} => {i=:07b}")
-        # B
-        r = i ^ digits[6]
-        if count_1s(r) == 1:
-            found[5] = i
-        else:
-            s = (i | digits[1]) ^ digits[8]
-            print(f"{s} => {s=:07b}")
-            if count_1s(s) == 1:
-                found[2] = i
-                posB = s
-    found[3] = (found[8] ^ posB) ^ posE
+    return value
 
-    print(f"{d_lens=}")
-    print(f"{posA=}")
-    print(f"{posB=}")
-    print(f"{posC=}")
-    print(f"{posD=}")
-    print(f"{posE=}")
-    print(f"{posF=}")
-    print(f"{posG=}")
-    print(f"{found=}")
-
-    return (found)
-
-
-def get_digit_mappings(signal, original_map):
-    print(f"{original_map=}")
-
-    digit_map = dict()
-    for digit in signal:
-        print(f"{digit=}")
-        if len(digit) == 2:
-            digit_map[1] = digit
-        elif len(digit) == 3:
-            digit_map[7] = digit
-        elif len(digit) == 4:
-            digit_map[4] = digit
-        elif len(digit) == 7:
-            digit_map[8] = digit
-
-    primes = {
-        "a": 2,
-        "b": 3,
-        "c": 5,
-        "d": 7,
-        "e": 11,
-        "f": 13,
-        "g": 17,
-        "h": 19,
-        "i": 23,
-        "j": 29
-    }
-
-    # Setup all signal products
-    # signal_products = dict()
-    # for s in signal:
-    #     signal_products[s] =  math.prod([primes[l] for l in s])
-
-    letter_map = dict()
-    A = ""
-    B = ""
-    C = ""
-    D = ""
-    E = ""
-    F = ""
-    G = ""
-
-    # Set of letters in 7 / 1 = a prime in the original set
-    digit_map[7]
-    (A,) = (set(digit_map[7]) ^ set(digit_map[1]))
-    print(A)
-    letter_map[A] = primes['a']
-
-
-    # If I multiple mapping 4 by prime['a'] and diff this with 9 I solve for G
-    g_candidate = (digit_map[4] + A)
-    g_candidate_product = math.prod([primes[l] for l in g_candidate])
-
-    for s in signal:
-        if len(g_candidate) >= len(s):
-            continue
-        set_diff = set(s) ^ set(g_candidate)
-        if len(set_diff) == 1:
-            (G,) = set_diff
-            letter_map[G] = primes['g']
-            digit_map[9] = s
-
-    # Now solve for 8 by adding e to 9 - solves for e
-    g_candidate = digit_map[9]
-    for s in signal:
-        if len(s) == 7:
-            set_diff = set(s) ^ set(g_candidate)
-            (E,) = set_diff
-            letter_map[E] = primes['e']
-            digit_map[8] = s
-
-    # Solved for 3 & D
-    # Taking A and G off 3 and len(2) for 1
-    for s in signal:
-        if len(s) == 5:
-            print(s)
-            set_diff = set(s) ^ set([A, G])
-            set_diff = set_diff ^ set(digit_map[1])
-
-            if len(set_diff) == 1:
-                (D,) = set_diff
-                letter_map[D] = primes['d']
-                digit_map[3] = s
-
-
-
-    # Remove D from 8 to solve for 0
-    zero_str = digit_map[8].replace(D, '')
-    print(f"{zero_str=}")
-    for s in signal:
-        if set(s) == set(zero_str) and len(s) == len(zero_str):
-            digit_map[0] = s
-
-
-    # 6 is the only remaining 1-gap number
-    # find 6
-    unsolved = set(signal) ^ set(digit_map.values())
-    print(unsolved)
-    for s in unsolved:
-        if len(s) == 6:
-            digit_map[6] = s
-
-
-    # 6 - E is 5
-    five = set(digit_map[6].replace(E, ''))
-    unsolved = set(signal) ^ set(digit_map.values())
-    for s in unsolved:
-        if five == set(s) and len(five) == len(s):
-            digit_map[5] = s
-        else:
-            digit_map[2] = s
-
-    print(f"{A=}{B=}{C=}{D=}{E=}{F=}{G=}")
-    print(f"{digit_map=}")
-    print(f"{letter_map=}")
-
-
-    return(digit_map)
 
 def main():
     day = 8
 
     with open(f'input/day_{day:02d}_test.txt') as fh:
-        data_test = utils.lines(fh.read())
-
-
+        data_test = [line for line in utils.lines(fh.read())]
 
     with open(f'input/day_{day:02d}.txt') as fh:
-        data = utils.lines(fh.read())
+        data = [line for line in utils.lines(fh.read())]
 
-    runs = [
-        {
-            "name": "** Test 01 **",
-            "data": data_test,
-            "assert_value": 26
-        },
-        {
-            "name": "** Main **",
-            "data": data
+        runs = [
+            {
+                "name": "** Test 01 **",
+                "data": data_test,
+                "assert_value": 26
+            },
+            {
+                "name": "** Main **",
+                "data": data
 
-        },
+            },
 
-    ]
-
-    # def print_bytes(byte_list):
-    #     print([f"{byte:02b}" for byte in byte_list])
-
-
-    def transpose_bytes(bytes_list):
-        # rotates a byte array
-        print(bytes_list)
-        byte_len = max([len(f"{byte:02b}") for byte in bytes_list])
-        byte_list_len = len(bytes_list)
-        print(f"{byte_len=}")
-
-        tbytes = [''] * byte_len
-        print(tbytes)
-
-        for bpos in range(0, byte_len):
-            for i, byte in enumerate(bytes_list):
-                byte_str = f"{byte:07b}"
-                # print(f"{byte_str}")
-                # print(f"{bpos=} {byte=} {byte_str=} ")
-                bit = byte_str[bpos]
-                # print(f"{bit=}")
-                tbytes[bpos] += bit
-
-
-        print(f"{tbytes=}")
-
-        return tbytes
-
-
-    def get_digit_map3(signal_codes):
-        print(signal_codes)
-        # Digit map will be something like:
-        # {'be': 1, 'fgadgef': 5.... whatever}
-        digit_map = {}
-
-        # Build a lookup for binary positions to set
-        letters = set(''.join(signal_codes))
-        start_pos = {i: j for i, j in zip(letters, range(0, len(letters)))}
-
-        # bin_lookup = {l for l in 'abcdefg', n for num in range(0)}
-        # Convert each signal byte into a binary number
-        # simply going to set a bit based on the letter position
-        # so axxxxxx = 1000000, xbxxxxx = 0100000, etc.
-        signal_bytes = []
-        for signal_code in signal_codes:
-            byte = 0
-            for letter in signal_code:
-                bit_index = start_pos[letter]
-                byte = byte | (1 << bit_index)
-            signal_bytes.append(byte)
-
-
-        # Transpose bytes
-        t_signal_bytes = transpose_bytes(signal_bytes)
-
-        # Each t_signal_byte represents a segment that can be turned on or off
-        # now we just need to figure out the valid order for the bytes to be in
-        # We'll know the ordering is correct if we can transpose them back
-        # and all the numbers are represented correctly.
-        for i, row in enumerate(t_signal_bytes):
-            print(i, row)
-
-
-
-
-        return digit_map
-
-
-    def get_number(output, digit_map):
-        s_num = ''
-
-        for o in output:
-            for i in digit_map:
-                set_m = set(digit_map[i])
-                set_o = set(o)
-
-                if (set_m == set_o) and (len(set_m) == len(set_o)):
-                    s_num += str(i)
-        num = int(s_num)
-        return num
-
+        ]
+#
     for run in runs:
         print(run['name'])
-        digits = get_digits()
-        lines = get_lines(run['data'])
 
-        output = [o['output'] for o in lines]
-        easy_digits = count_easy_digits(output)
+        lines = run['data']
 
-        print(f"{easy_digits=}")
-
-        sum = 0
+        easy_digit_count = 0
+        output_sum = 0
         for line in lines:
-            signal = line['signals']
-            # digit_map = get_digit_mappings(signal)
-            digit_map = get_digit_map3(signal)
-            num = get_number(line['output'], digit_map)
-            sum += num
+            input, output = [x.strip().split(' ') for x in line.split('|')]
 
-        print(sum)
+            output_code_counts = get_codes_by_len(output)
+            easy_digit_count += sum([len(output_code_counts[i]) for i in output_code_counts if i in (2,3,4,7)])
+
+            output_value = decode_line(input, output)
+            output_sum += output_value
+        print(f'{easy_digit_count=}')
+        print(f'{output_sum=}')
 
 
 if __name__ == "__main__":
