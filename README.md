@@ -17,6 +17,7 @@ Python 3.9
 
 | Stars | Day | Title                                                          | P1 Time  | P1 Rank | P2 Time  | P2 Rank | Notes               |
 |:------|:----|:---------------------------------------------------------------|:---------|:--------|:---------|:--------|:--------------------|
+| ⭐⭐    | 10  | [Syntax Scoring](https://adventofcode.com/2021/day/10)         | 01:39:07 | 11469    | 01:52:21 | 10553  | chunks \[\]{}<>()  |
 | ⭐⭐    | 9   | [Smoke Basin](https://adventofcode.com/2021/day/9)             | 00:40:57 | 8172    | 03:06:38 | 11396   | lowpoints / basins  |
 | ⭐⭐    | 8   | [Seven Segment Search](https://adventofcode.com/2021/day/8)    | 00:35:16 | 8852    | 06:12:32 | 15900   | digits * revisit!   |
 | ⭐⭐    | 7   | [The Treachery of Whales](https://adventofcode.com/2021/day/7) | 00:21:26 | 8267    | 01:38:17 | 13857   | crabs               |
@@ -29,8 +30,12 @@ Python 3.9
 
 ### Alternative Solutions
 
-[[GitHub] Bogdnap - Awesome Advent of Code](https://github.com/Bogdanp/awesome-advent-of-code#python)
 
+[[GitHub] Bogdnap - Awesome Advent of Code](https://github.com/Bogdanp/awesome-advent-of-code#python)
+- Repo aggregator
+
+[[GitHub] GeertLitjens - AoC2021](https://github.com/GeertLitjens/advent-of-code-2021)
+- Nice explanations
 
 ### Credits
 
