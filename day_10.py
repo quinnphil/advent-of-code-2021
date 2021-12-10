@@ -1,118 +1,62 @@
 import utils
 import math
 import re
+from collections import deque
 
 def check_lines(lines):
-    open = {
+    chunk_sets = {
         '(': ')',
         '[': ']',
         '<': '>',
         '{': '}'
     }
-    scores = {
-        ')': 3,
-        ']': 57,
-        '>': 1197,
-        '}': 25137
-    }
-
-    corrupt_lines = []
-
-
-    for l, line in enumerate(lines):
-        expecting = []
-        i = 0
-        error = False
-
-        while i < len(line) and not error:
-            c=line[i]
-            next_close = None
-            if expecting:
-                next_close = expecting[-1]
-            next_valid = list(open.keys())
-            next_valid.append(next_close)
-
-            if  (c in open.keys()):
-
-                expecting.append(open[c])
-            elif c == next_close:
-                    expecting = expecting[:-1]
-            else:
-                error = True
-                corrupt_lines.append((l, i, next_close, c, scores[c]))
-
-            i+=1
-
-    return corrupt_lines
-
-def check_lines2(lines):
-    open = {
-        '(': ')',
-        '[': ']',
-        '<': '>',
-        '{': '}'
-    }
-    scores = {
+    scores_corrupt = {
         ')': 3,
         ']': 57,
         '}': 1197,
         '>': 25137
+    }
+    scores_incomplete = {
+        ')': 1,
+        ']': 2,
+        '}': 3,
+        '>': 4
     }
 
     corrupt_lines = []
     incomplete_lines = []
 
     for l, line in enumerate(lines):
-        scan = True
+        stack = deque()
+        expecting = []
         i = 0
-        old = line
-        new = ""
-        while scan:
+        error = False
 
-            new = re.sub(r'(\[\])|(\{\})|(\(\))|(\<\>)','', old)
-
-            # print(f'{old=}')
-            # print(f'{new=}')
-
-            # Basic string found
-            if len(old) == len(new):
-                scan = False
+        while i < len(line) and not error:
+            c = line[i]
+            # Add open character to stack
+            if c in chunk_sets:
+                stack.append(c)
             else:
-                old = new
+                # Check expected close character compliments last added open character
+                last_c = stack.pop()
 
-        corrupt_line = None
-        while not corrupt_line and i < len(new):
-            c = new[i]
-            if c in open.values():
-                corrupt_line = (l, i, None, c, scores[c], new)
-
-            i +=1
-        if corrupt_line:
-            corrupt_lines.append(corrupt_line)
-        else:
-            # Line is could be incomplete
-            r_line = ""
-            scores = {
-                ')': 1,
-                ']': 2,
-                '}': 3,
-                '>': 4
-            }
+                if not chunk_sets[last_c] == c:
+                    corrupt_line = (l, i, last_c, c, scores_corrupt[c])
+                    corrupt_lines.append(corrupt_line)
+                    error = True
+            i += 1
+        # Handle incomplete lines
+        if not error:
             score = 0
-            for c in new[::-1]:
-                r_line += open[c]
-                score = (score * 5) + scores[open[c]]
 
-            print(f'{new=}')
-            print(f'{r_line=}')
-            print(f'{score=}')
-            incomplete_line = (l, i, None, score, new, r_line)
+            while stack:
+                c = stack.pop()
+                score = (score * 5) + scores_incomplete[chunk_sets[c]]
+            incomplete_line = (l, i, score)
             incomplete_lines.append(incomplete_line)
-        # print(corrupt_lines)
 
     return corrupt_lines, incomplete_lines
-
-
 
 
 def main():
@@ -128,35 +72,34 @@ def main():
         {
             "name": "** Test 01 **",
             "data": data_test,
-            "assert_value": 26397
+            "assert_value_p1": 26397,
+            "assert_value_p2": 288957
         },
         {
             "name": "** Part 01 **",
-            "data": data,
-
+            "data": data
         },
     ]
 
     for run in runs:
         print(run['name'])
 
-        corrupt_lines2, incomplete_lines = check_lines2(run['data'])
+        corrupt_lines2, incomplete_lines = check_lines(run['data'])
         score = sum(s[4] for s in corrupt_lines2)
 
+        if (av := run.get('assert_value_p1')) is not None:
+            print(f'{score=} <=> {av=}')
+            assert(score == av)
 
         print(f'{score=}')
 
-
-        sorted_scores = sorted([s[3] for s in incomplete_lines])
+        sorted_scores = sorted([s[2] for s in incomplete_lines])
         mid_point = int(len(sorted_scores) / 2)
-        print(f'{sorted_scores=}')
-        print(f'{mid_point=}')
-        print(f'{sorted_scores[mid_point]=}')
-
-
-        # 267657 Not this
-        # 440013 == too high
-
+        score_incomplete = sorted_scores[mid_point]
+        if (av := run.get('assert_value_p2')) is not None:
+            print(f'{score_incomplete=} <=> {av=}')
+            assert(score_incomplete == av)
+        print(f'{score_incomplete=}')
 
 
 if __name__ == "__main__":
