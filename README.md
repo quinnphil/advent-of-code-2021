@@ -17,7 +17,8 @@ Python 3.9
 
 | Stars | Day | Title                                                          | P1 Time  | P1 Rank | P2 Time  | P2 Rank | Notes               |
 |:------|:----|:---------------------------------------------------------------|:---------|:--------|:---------|:--------|:--------------------|
-| ⭐⭐    | 10  | [Syntax Scoring](https://adventofcode.com/2021/day/10)         | 01:39:07 | 11469    | 01:52:21 | 10553  | chunks \[\]{}<>()  |
+| ⭐⭐    | 11  | [Dumbo Octopus](https://adventofcode.com/2021/day/11)          | 01:57:01 | 8206    | 02:08:09 | 8276    | Flashing octopodes  |
+| ⭐⭐    | 10  | [Syntax Scoring](https://adventofcode.com/2021/day/10)         | 01:39:07 | 11469   | 01:52:21 | 10553   | chunks \[\]{}<>()   |
 | ⭐⭐    | 9   | [Smoke Basin](https://adventofcode.com/2021/day/9)             | 00:40:57 | 8172    | 03:06:38 | 11396   | lowpoints / basins  |
 | ⭐⭐    | 8   | [Seven Segment Search](https://adventofcode.com/2021/day/8)    | 00:35:16 | 8852    | 06:12:32 | 15900   | digits * revisit!   |
 | ⭐⭐    | 7   | [The Treachery of Whales](https://adventofcode.com/2021/day/7) | 00:21:26 | 8267    | 01:38:17 | 13857   | crabs               |
@@ -28,9 +29,8 @@ Python 3.9
 | ⭐⭐    | 2   | [Dive!](https://adventofcode.com/2021/day/2)                   | 00:07:10 | 5013    | 00:11:27 | 4910    | 05:00 start         |
 | ⭐⭐    | 1   | [Sonar Sweep](https://adventofcode.com/2021/day/1)             | 01:13:46 | 11254   | 01:29:16 | 10643   | 06:05 start (late!) |
 
+
 ### Alternative Solutions
-
-
 [[GitHub] Bogdnap - Awesome Advent of Code](https://github.com/Bogdanp/awesome-advent-of-code#python)
 - Repo aggregator
 
