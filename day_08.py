@@ -14,10 +14,8 @@ def decode_line(input, output):
     value = 0
     n = {}
 
-    print(f'{input=}')
-    print(f'{output=}')
     input_count = get_codes_by_len(input)
-    print(f'{input_count=}')
+
 
     # Easy numbers
     n[1] = input_count[2].pop()  # 1 is the only number with two segments
