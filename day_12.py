@@ -7,29 +7,22 @@ def make_map(paths):
 
     # Go through list making caves
     for path in paths:
-        start_node, end_node = path.split('-')
+        node_a, node_b = path.split('-')
 
-        # Get start and end nodes the right way round
-        if end_node == 'start' or start_node == 'end':
-            tmp_node = start_node
-            start_node = end_node
-            end_node = tmp_node
+        for start_node, end_node in [(node_a, node_b), (node_b, node_a)]:
 
-        if not cave_map.get(start_node):
-            cave_map[start_node] = []
-        cave_map[start_node].append(end_node)
-
-        # Add way back
-        if end_node != 'end' and start_node != 'start':
-            if not cave_map.get(end_node):
-                cave_map[end_node] = []
-            cave_map[end_node].append(start_node)
+            # Skip adding if end and start in wrong location
+            if start_node == 'end' or end_node == 'start':
+                continue
+            else:
+                if not cave_map.get(start_node):
+                    cave_map[start_node] = []
+                cave_map[start_node].append(end_node)
 
     return cave_map
 
+
 def solve(cave_map, current_cave, route, routes, single_small_cave=True):
-
-
     # Success - End cave found
     if current_cave == 'end':
         route.append(current_cave)
@@ -50,23 +43,19 @@ def solve(cave_map, current_cave, route, routes, single_small_cave=True):
                 # already seen a cave twice
                 return routes
 
-
     route.append(current_cave)
     for next_cave in cave_map[current_cave]:
         routes = solve(cave_map, next_cave, route.copy(), routes, single_small_cave)
 
-
-
     return routes
 
 
-def walk_map(cave_map,single_small_cave):
-    routes = solve(cave_map, "start", [], [],single_small_cave )
+def walk_map(cave_map, single_small_cave):
+    routes = solve(cave_map, "start", [], [], single_small_cave)
 
     good_routes = [route for route in routes if route[-1] == 'end']
 
     return good_routes
-
 
 
 def main():
@@ -123,7 +112,6 @@ def main():
             "single_small_cave": False
         },
 
-
     ]
 
     for run in runs:
@@ -139,9 +127,6 @@ def main():
                 print(f"Error - expected {av=} got {n_routes=}")
 
         print(f'{n_routes=}')
-
-
-
 
 
 if __name__ == "__main__":
