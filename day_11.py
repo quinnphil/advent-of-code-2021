@@ -14,7 +14,7 @@ def display_grid(grid):
     for y in range(0,10):
         print()
         for x in  range(0, 10):
-            print(grid[(y, x)],end='')
+            print(grid[(y, x)], end='')
     print()
     print()
     return grid
