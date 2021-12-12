@@ -38,7 +38,7 @@ def solve(cave_map, current_cave, route, routes, single_small_cave=True):
 
     # Bad route - already been to this small cave
     if (current_cave.lower() == current_cave) and (current_cave in route):
-        if not single_small_cave:  # only one visit allowed
+        if single_small_cave:  # only one visit allowed
             route.append(current_cave)
             routes.append(route)
             return routes
@@ -60,11 +60,8 @@ def solve(cave_map, current_cave, route, routes, single_small_cave=True):
     return routes
 
 
-def walk_map(cave_map):
-    routes = solve(cave_map, "start", [], [])
-
-    print(f'{routes=}')
-    print(f'{cave_map=}')
+def walk_map(cave_map,single_small_cave):
+    routes = solve(cave_map, "start", [], [],single_small_cave )
 
     good_routes = [route for route in routes if route[-1] == 'end']
 
@@ -75,34 +72,73 @@ def walk_map(cave_map):
 def main():
     day = 12
 
-    with open(f'input/day_{day:02d}_test.txt') as fh:
-        data_test = utils.lines(fh.read())
+    with open(f'input/day_{day:02d}_test_01.txt') as fh:
+        data_test_01 = utils.lines(fh.read())
+
+    with open(f'input/day_{day:02d}_test_02.txt') as fh:
+        data_test_02 = utils.lines(fh.read())
+
+    with open(f'input/day_{day:02d}_test_03.txt') as fh:
+        data_test_03 = utils.lines(fh.read())
 
     with open(f'input/day_{day:02d}.txt') as fh:
         data = utils.lines(fh.read())
 
     runs = [
-        # {
-        #     "name": "** Test 01 **",
-        #     "data": data_test,
-        #     "single_small_cave": True
-        #
-        # },
+        {
+            "name": "** Test 01 **",
+            "data": data_test_01,
+            "single_small_cave": True,
+            "assert_value": 10
+
+        },
+        {
+            "name": "** Test 02 **",
+            "data": data_test_02,
+            "single_small_cave": True,
+            "assert_value": 19
+
+        },
+        {
+            "name": "** Test 03 **",
+            "data": data_test_03,
+            "single_small_cave": True,
+            "assert_value": 226
+
+        },
         {
             "name": "** Part 01 **",
             "data": data,
             "single_small_cave": True
         },
+        {
+            "name": "** Test 4 **",
+            "data": data_test_02,
+            "single_small_cave": False,
+            "assert_value": 103
+        },
+        {
+            "name": "** Part 2 **",
+            "data": data,
+            "single_small_cave": False
+        },
+
+
     ]
 
     for run in runs:
         print(run['name'])
 
         cave_map = make_map(run['data'])
-        print(f'{cave_map=}')
-        routes = walk_map(cave_map)
+        routes = walk_map(cave_map, run['single_small_cave'])
 
-        print(f'{len(routes)=}')
+        n_routes = len(routes)
+
+        if (av := run.get('assert_value')) is not None:
+            if (n_routes != av):
+                print(f"Error - expected {av=} got {n_routes=}")
+
+        print(f'{n_routes=}')
 
 
 
