@@ -17,6 +17,7 @@ Python 3.9
 
 | Stars | Day | Title                                                          | P1 Time  | P1 Rank | P2 Time  | P2 Rank | Notes                |
 |:------|:----|:---------------------------------------------------------------|:---------|:--------|:---------|:--------|:---------------------|
+| ⭐⭐    | 13  | [Transparent Origami](https://adventofcode.com/2021/day/13)    | 00:54:25 | 5935    | 00:55:38 | 4770    | Folding dots         |
 | ⭐⭐    | 12  | [Passage Pathing](https://adventofcode.com/2021/day/12)        | 02:29:37 | 8128    | 02:53:28 | 7422    | Big cave little cave |
 | ⭐⭐    | 11  | [Dumbo Octopus](https://adventofcode.com/2021/day/11)          | 01:57:01 | 8206    | 02:08:09 | 8276    | Flashing octopodes   |
 | ⭐⭐    | 10  | [Syntax Scoring](https://adventofcode.com/2021/day/10)         | 01:39:07 | 11469   | 01:52:21 | 10553   | chunks \[\]{}<>()    |
@@ -31,8 +32,12 @@ Python 3.9
 | ⭐⭐    | 1   | [Sonar Sweep](https://adventofcode.com/2021/day/1)             | 01:13:46 | 11254   | 01:29:16 | 10643   | 06:05 start (late!)  |
 
 ### Alternative Solutions
+
 [[GitHub] Bogdnap - Awesome Advent of Code](https://github.com/Bogdanp/awesome-advent-of-code#python)
 - Repo aggregator
+
+[[GitHub] James Ansley](https://github.com/James-Ansley/adventofcode)
+- University of Auckland
 
 [[GitHub] GeertLitjens - AoC2021](https://github.com/GeertLitjens/advent-of-code-2021)
 - Nice explanations
