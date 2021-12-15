@@ -17,6 +17,7 @@ Python 3.9
 
 | Stars | Day | Title                                                           | P1 Time  | P1 Rank | P2 Time  | P2 Rank | Notes                |
 |:------|:----|:----------------------------------------------------------------|:---------|:--------|:---------|:--------|:---------------------|
+| ⭐⭐    | 15  | [Chiton](https://adventofcode.com/2021/day/15)                  | 01:22:01 | 4881    | 01:39:19 | 3326    | Heap Queue           |
 | ⭐⭐    | 14  | [Extended Polymerization](https://adventofcode.com/2021/day/14) | 00:29:15 | 5093    | 02:23:52 | 6587    | Polymers NBCH        |
 | ⭐⭐    | 13  | [Transparent Origami](https://adventofcode.com/2021/day/13)     | 00:54:25 | 5935    | 00:55:38 | 4770    | Folding dots         |
 | ⭐⭐    | 12  | [Passage Pathing](https://adventofcode.com/2021/day/12)         | 02:29:37 | 8128    | 02:53:28 | 7422    | Big cave little cave |
@@ -41,6 +42,9 @@ Python 3.9
 
 [[GitHub] GeertLitjens - AoC2021](https://github.com/GeertLitjens/advent-of-code-2021)
 - Nice explanations
+
+[[GitHub] IanFindlay - Aoc](https://github.com/IanFindlay/advent-of-code)
+- Python
 
 ### Credits
 
