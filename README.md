@@ -13,10 +13,12 @@ successfully answer problems from the 2021 contest.
 ### Language  
 Python 3.9
 
+
 ### Personal Stats  
 
 | Stars | Day | Title                                                           | P1 Time  | P1 Rank | P2 Time  | P2 Rank | Notes                |
 |:------|:----|:----------------------------------------------------------------|:---------|:--------|:---------|:--------|:---------------------|
+| ⭐⭐    | 16  | [Packet Decoder](https://adventofcode.com/2021/day/16)          | 02:15:18 | 4496    | 02:45:23 | 4238    | Binary Packets       |
 | ⭐⭐    | 15  | [Chiton](https://adventofcode.com/2021/day/15)                  | 01:22:01 | 4881    | 01:39:19 | 3326    | Heap Queue           |
 | ⭐⭐    | 14  | [Extended Polymerization](https://adventofcode.com/2021/day/14) | 00:29:15 | 5093    | 02:23:52 | 6587    | Polymers NBCH        |
 | ⭐⭐    | 13  | [Transparent Origami](https://adventofcode.com/2021/day/13)     | 00:54:25 | 5935    | 00:55:38 | 4770    | Folding dots         |
@@ -32,6 +34,12 @@ Python 3.9
 | ⭐⭐    | 3   | [Binary Diagnostic](https://adventofcode.com/2021/day/3)        | 00:31:43 | 10247   | 01:16:51 | 8352    | O2 and CO2 binary    |
 | ⭐⭐    | 2   | [Dive!](https://adventofcode.com/2021/day/2)                    | 00:07:10 | 5013    | 00:11:27 | 4910    | 05:00 start          |
 | ⭐⭐    | 1   | [Sonar Sweep](https://adventofcode.com/2021/day/1)              | 01:13:46 | 11254   | 01:29:16 | 10643   | 06:05 start (late!)  |
+
+### Stuff to deep-dive into    
+- [bitstring](https://github.com/scott-griffiths/bitstring)
+- [Dijkstra's algorithm](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm)
+- [heapq](https://docs.python.org/3/library/heapq.html)
+- 
 ### Alternative Solutions
 
 [[GitHub] Bogdnap - Awesome Advent of Code](https://github.com/Bogdanp/awesome-advent-of-code#python)

@@ -159,12 +159,12 @@ def main():
 
 
     runs = [
-        {
-            "name": "** Test 01 **",
-            "data": data_test,
-            "assert_value": 10
-
-        },
+        # {
+        #     "name": "** Test 01 **",
+        #     "data": data_test,
+        #     "assert_value": 10
+        #
+        # },
         {
             "name": "** Part 01 **",
             "data": data,
@@ -184,6 +184,9 @@ def main():
 
         # input = binascii.unhexlify(run['data'])
         input = bytes.fromhex(run['data'])
+
+        with open('fh_out.bin', 'wb') as fh:
+            fh.write(input)
         print(f'{input}')
 
         bits = BitStream(input)
